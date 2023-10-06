@@ -7,7 +7,6 @@ ALPHA_IMAGE_NAME=fleet-telemetry-server-aplha:v0.0.1
 ALPHA_IMAGE_COMPRESSED_FILENAME := $(subst :,-, $(ALPHA_IMAGE_NAME))
 
 GO_FLAGS        ?=
-
 ifneq (,$(findstring darwin/arm,$(VERSION)))
     GO_FLAGS += -tags dynamic
 endif
@@ -48,7 +47,7 @@ integration: generate-certs
 	@echo "** RUNNING INTEGRATION TESTS **"
 	./test/integration/pretest.sh
 	docker-compose -p app -f docker-compose.yml build
-	docker-compose -p app -f docker-compose.yml up -d --remove-orphans
+	docker-compose -p app -f docker-compose.yml up -d --remove-orphans --wait --wait-timeout 90
 	./test/integration/test.sh
 	docker-compose -p app -f docker-compose.yml down
 	@echo "** INTEGRATION TESTS FINISHED **"
